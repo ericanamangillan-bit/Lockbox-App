@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Hello, you are logged in.</h1>
+    <a href="{{ url_for('logout') }}">Press here to logout</a>
+    <h2>Generate a new password</h2>
+    <form method="POST" action="{{ url_for('dashboard') }}">
+        {{ form.hidden_tag() }}
+        {{ form.website.label }} {{ form.website() }}<br>
+        {{ form.submit() }}
+    </form>
+    <h2>Your stored passwords</h2>
+    <ul>
+        {% for password in user_passwords %}
+            <li>{{ password.website }} - <a href="{{ url_for('decrypt_password', password_id=password.id) }}">Decrypt Password</a></li>
+        {% endfor %}
+    </ul>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>

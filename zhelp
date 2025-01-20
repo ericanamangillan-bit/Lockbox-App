@@ -1,0 +1,4 @@
+sqlite3 database_changed.db
+sqlite3 user_password.db
+.tables
+SELECT * FROM User;
