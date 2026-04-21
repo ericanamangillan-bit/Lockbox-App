@@ -3,6 +3,7 @@ from app import app, db
 from flaskr.models.models import User
 from flaskr.service.services import custom_hash
 
+
 @pytest.fixture
 def client():
     app.config['TESTING'] = True
@@ -17,40 +18,51 @@ def client():
 
 def test_register(client):
     with app.app_context():
+        # send POST request to register
         response = client.post('/register', data=dict(
             username='testuser',
             password='testpassword'
         ), follow_redirects=True)
+        
+        # verify successful registration
         assert response.status_code == 200
         assert b'Login' in response.data
 
 def test_login(client):
     with app.app_context():
+        # create test user
         salt = 'testsalt'
         hashed_password = custom_hash('testpassword', salt)
         user = User(username='testuser', password=hashed_password, salt=salt)
         db.session.add(user)
         db.session.commit()
+
+        # attempt login
         response = client.post('/login', data=dict(
             username='testuser',
             password='testpassword'
         ), follow_redirects=True)
+
+        # verify successful login
         assert response.status_code == 200
         assert b'Dashboard' in response.data
 
 def test_login_invalid_password(client):
     with app.app_context():
+        # create test user
         salt = 'testsalt'
         hashed_password = custom_hash('testpassword', salt)
         user = User(username='testuser', password=hashed_password, salt=salt)
         db.session.add(user)
         db.session.commit()
-        
-        with client.session_transaction() as session:
-            response = client.post('/login', data=dict(
-                username='testuser',
-                password='wrongpassword'
-            ), follow_redirects=True)
-            
+
+        # attempt login with the wrong password
+        response = client.post('/login', data=dict(
+            username='testuser',
+            password='wrongpassword'
+        ), follow_redirects=True)
+
+        # verify failed login
         assert response.status_code == 200
         assert b'Invalid username or password' in response.data
+        assert b'Dashboard' not in response.data

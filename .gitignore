@@ -1,0 +1,16 @@
+
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.database_changed
+*.database_changed_backup
+*.sqlite
+*.sqlite3
+.pytest_cache/
+.coverage
+.vscode/
+.idea/
+.DS_Store
