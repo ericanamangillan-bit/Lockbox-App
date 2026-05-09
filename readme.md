@@ -28,3 +28,11 @@ Lockbox helps users generate strong, random passwords and stores them securely i
    ```bash
    git clone [https://github.com/ericanamangillan-bit/Lockbox-App](https://github.com/ericanamangillan-bit/Lockbox-App)
    cd lockbox
+
+## Security Note
+
+This project uses a local SQLite database for development and testing.
+
+Earlier versions of the project included a local test database containing dummy data only. This has now been removed from the repository, and database files are excluded from version control using `.gitignore`.
+
+No real user passwords or sensitive credentials are included in this project.
